@@ -12,7 +12,7 @@ BIN = demo
 
 CFLAGS = -I$(LVGL_DIR)/ $(DEFINES) $(WARNINGS) $(OPTIMIZATION) -I$(LVGL_DIR)  -I.
 
-LDFLAGS = -lm  -lpthread  -lSDL2  -lpng -linput  -ldrm
+LDFLAGS = -lm  -lpthread  -lSDL2  -lpng -linput 
 
 #Collect the files to compile
 MAINSRC = ./main.c
