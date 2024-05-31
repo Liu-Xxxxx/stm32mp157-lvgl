@@ -1,19 +1,14 @@
-#
-# Makefile
-#
-CC = arm-none-linux-gnueabihf-gcc 
+# Compiler settings
+CC = arm-none-linux-gnueabihf-gcc
 LVGL_DIR_NAME ?= lvgl
-LVGL_DIR ?= ${shell pwd}
+LVGL_DIR ?= .
+OUTPUT_DIR = output
 
-CFLAGS = -O3 -g0 -I$(LVGL_DIR)/
+CFLAGS = -O3 -g0 -I$(LVGL_DIR)/ -I.
 
-BIN = demo
+LDFLAGS = -lm -lpthread -lSDL2 -lpng -linput
 
-CFLAGS = -I$(LVGL_DIR)/ $(DEFINES) $(WARNINGS) $(OPTIMIZATION) -I$(LVGL_DIR)  -I.
-
-LDFLAGS = -lm  -lpthread  -lSDL2  -lpng -linput 
-
-#Collect the files to compile
+# Collect the files to compile
 MAINSRC = ./main.c
 
 include ./lvgl/lvgl.mk
@@ -22,25 +17,27 @@ include ./lv_demos/lv_demo.mk
 
 OBJEXT ?= .o
 
-AOBJS = $(ASRCS:.S=$(OBJEXT))
-COBJS = $(CSRCS:.c=$(OBJEXT))
+# Update object file paths to include the output directory
+AOBJS = $(patsubst %,$(OUTPUT_DIR)/%,$(ASRCS:.S=$(OBJEXT)))
+COBJS = $(patsubst %,$(OUTPUT_DIR)/%,$(CSRCS:.c=$(OBJEXT)))
+MAINOBJ = $(patsubst %,$(OUTPUT_DIR)/%,$(MAINSRC:.c=$(OBJEXT)))
 
-MAINOBJ = $(MAINSRC:.c=$(OBJEXT))
+OBJS = $(AOBJS) $(COBJS) $(MAINOBJ)
 
-SRCS = $(ASRCS) $(CSRCS) $(MAINSRC)
-OBJS = $(AOBJS) $(COBJS)
+BIN = $(OUTPUT_DIR)/demo
 
-## MAINOBJ -> OBJFILES
+all: $(BIN)
 
-all: default
+$(BIN): $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
-%.o: %.c
-	@$(CC)  $(CFLAGS) -c $< -o $@
-	@echo "CC $<"
-    
-default: $(AOBJS) $(COBJS) $(MAINOBJ)
-	$(CC) -o $(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
+# Rule to compile C source files
+$(OUTPUT_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-clean: 
-	rm -f $(BIN) $(AOBJS) $(COBJS) $(MAINOBJ)
+# Rule to clean the build
+clean:
+	rm -rf $(OUTPUT_DIR)
 
+# Additional dependencies or rules can go here
