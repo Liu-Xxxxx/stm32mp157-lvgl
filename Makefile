@@ -1,14 +1,13 @@
 #
 # Makefile
 #
-CC = arm-buildroot-linux-gnueabihf-gcc 
+CC = arm-none-linux-gnueabihf-gcc 
 LVGL_DIR_NAME ?= lvgl
 LVGL_DIR ?= ${shell pwd}
 
 CFLAGS = -O3 -g0 -I$(LVGL_DIR)/
 
 BIN = demo
-
 
 CFLAGS = -I$(LVGL_DIR)/ $(DEFINES) $(WARNINGS) $(OPTIMIZATION) -I$(LVGL_DIR)  -I.
 
@@ -41,7 +40,6 @@ all: default
     
 default: $(AOBJS) $(COBJS) $(MAINOBJ)
 	$(CC) -o $(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
-	cp $(BIN) ~/nfs_rootfs
 
 clean: 
 	rm -f $(BIN) $(AOBJS) $(COBJS) $(MAINOBJ)
