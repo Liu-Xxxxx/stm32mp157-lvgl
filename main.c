@@ -1,11 +1,12 @@
 #include "lvgl/lvgl.h"
 #include "lv_drivers/display/fbdev.h"
-#include "lv_demos/lv_demo.h"
+// #include "lv_demos/lv_demo.h"
 #include <unistd.h>
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
 #include "lv_drivers/indev/libinput_drv.h"
+#include "user/ui.h"
 
 #define DISP_BUF_SIZE (128 * 1024)
 
@@ -26,24 +27,26 @@ int main(void)
     /*Initialize and register a display driver*/
     static lv_disp_drv_t disp_drv;
     lv_disp_drv_init(&disp_drv);
-    disp_drv.draw_buf   = &disp_buf;
-    disp_drv.flush_cb   = fbdev_flush;
-    disp_drv.hor_res    = 1024;
-    disp_drv.ver_res    = 600;
+    disp_drv.draw_buf = &disp_buf;
+    disp_drv.flush_cb = fbdev_flush;
+    disp_drv.hor_res = 1024;
+    disp_drv.ver_res = 600;
     lv_disp_drv_register(&disp_drv);
 
     libinput_init();
     lv_indev_drv_t indev_drv;
     lv_indev_drv_init(&indev_drv);
-    indev_drv.type =LV_INDEV_TYPE_POINTER;
-    indev_drv.read_cb =libinput_read;
+    indev_drv.type = LV_INDEV_TYPE_POINTER;
+    indev_drv.read_cb = libinput_read;
     lv_indev_drv_register(&indev_drv);
 
     /*Create a Demo*/
-    lv_demo_widgets();
+    // lv_demo_widgets();
+    ui_init();
 
     /*Handle LitlevGL tasks (tickless mode)*/
-    while(1) {
+    while (1)
+    {
         lv_task_handler();
         usleep(5000);
     }
@@ -55,7 +58,8 @@ int main(void)
 uint32_t custom_tick_get(void)
 {
     static uint64_t start_ms = 0;
-    if(start_ms == 0) {
+    if (start_ms == 0)
+    {
         struct timeval tv_start;
         gettimeofday(&tv_start, NULL);
         start_ms = (tv_start.tv_sec * 1000000 + tv_start.tv_usec) / 1000;

@@ -1,5 +1,6 @@
 # Compiler settings
 CC = arm-none-linux-gnueabihf-gcc
+#CC = gcc
 LVGL_DIR_NAME ?= lvgl
 LVGL_DIR ?= .
 OUTPUT_DIR = output
@@ -13,7 +14,8 @@ MAINSRC = ./main.c
 
 include ./lvgl/lvgl.mk
 include ./lv_drivers/lv_drivers.mk
-include ./lv_demos/lv_demo.mk
+# include ./lv_demos/lv_demo.mk
+include ./user/user.mk
 
 OBJEXT ?= .o
 
