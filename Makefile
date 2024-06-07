@@ -7,7 +7,7 @@ OUTPUT_DIR = output
 
 CFLAGS = -O3 -g0 -I$(LVGL_DIR)/ -I.
 
-LDFLAGS = -lm -lpthread -lSDL2 -lpng -linput
+LDFLAGS = -lm -lpthread -lSDL2 -lpng -linput -lpaho-mqtt3a
 
 # Collect the files to compile
 MAINSRC = ./main.c
@@ -16,6 +16,8 @@ include ./lvgl/lvgl.mk
 include ./lv_drivers/lv_drivers.mk
 # include ./lv_demos/lv_demo.mk
 include ./squareLine/squareLine.mk
+include ./user/user.mk
+include ./mqtt/mqtt.mk
 
 OBJEXT ?= .o
 

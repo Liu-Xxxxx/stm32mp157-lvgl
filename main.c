@@ -5,10 +5,33 @@
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
+#include <stdlib.h>
 #include "lv_drivers/indev/libinput_drv.h"
-#include "user/ui.h"
+#include "squareLine/ui.h"
+#include "user/mqtt_iot.h"
 
 #define DISP_BUF_SIZE (128 * 1024)
+
+bool isConnected = false;
+pthread_t discon_t;
+
+static void *mqtt_disconnect_t(void *argv)
+{
+    while (1)
+    {
+        char ch;
+        ch = getchar();
+        if (ch == 'Q' || ch == 'q')
+        {
+            printf("Try to exit mqtt task\n");
+            if (mqtt_disconnect() == EXIT_SUCCESS)
+                break;
+        }
+    }
+    isConnected = false;
+    pthread_exit(&discon_t); // 退出线程
+    return NULL;
+}
 
 int main(void)
 {
@@ -44,6 +67,12 @@ int main(void)
     // lv_demo_widgets();
     ui_init();
 
+    // 成功建立客户端和服务器的连接且订阅主题后才创建断开连接的线程
+    if (mqtt_iot() == 0)
+    {
+        isConnected = true;
+        pthread_create(&discon_t, 0, mqtt_disconnect_t, NULL);
+    }
     /*Handle LitlevGL tasks (tickless mode)*/
     while (1)
     {

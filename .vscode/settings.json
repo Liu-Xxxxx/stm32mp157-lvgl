@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "ui.h": "c"
+        "ui.h": "c",
+        "stdio.h": "c",
+        "mqttclient.h": "c",
+        "libinput_drv.h": "c"
     }
 }

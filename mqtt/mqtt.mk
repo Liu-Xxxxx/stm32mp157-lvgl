@@ -1,0 +1,1 @@
+CSRCS += $(shell find -L mqtt -name "*.c")
