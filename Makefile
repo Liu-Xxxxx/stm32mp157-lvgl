@@ -15,7 +15,7 @@ MAINSRC = ./main.c
 include ./lvgl/lvgl.mk
 include ./lv_drivers/lv_drivers.mk
 # include ./lv_demos/lv_demo.mk
-include ./user/user.mk
+include ./squareLine/squareLine.mk
 
 OBJEXT ?= .o
 
