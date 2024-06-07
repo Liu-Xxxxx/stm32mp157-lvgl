@@ -6,6 +6,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "lv_drivers/indev/libinput_drv.h"
 #include "squareLine/ui.h"
 #include "user/mqtt_iot.h"
